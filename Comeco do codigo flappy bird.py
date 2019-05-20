@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
         #construtor e coletar imagem 
         pygame.sprite.Sprite.__init__(self)    
         self.image = player_img      
-        self.image = pygame.transform.scale(player_img, (50, 38))   
+        self.image = pygame.transform.scale(player_img, (35, 35))   
         self.image.set_colorkey(BLACK)   
         self.rect = self.image.get_rect()
         
@@ -68,30 +68,38 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = GROUND
             self.speedy = 0 
             self.state = STILL
-            state = DONE
+        if self.rect.y <= 0:
+            self.rect.y = 0
+            self.speedy = 0 
+            self.state = STILL
         self.speedy += gravidade
+        
         
 class Cano_de_cima (pygame.sprite.Sprite):
     
     def __init__(self, canodecima):
         
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(canodecima, (50, 100))       
+        
+        #define a largura aleatoria do cano
+        aleatorio = random.randint(100,250)
+        
+        self.image = pygame.transform.scale(canodecima, (80, aleatorio))       
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         
         #poscicoes 
         self.rect.y =  0
-        self.rect.x = (WIDTH/2)
+        self.rect.x = (WIDTH/2)+25
         
-        self.speedx = 30
+        self.speedx = -5
         self.speedy = 0 
         
     #def update(self):
     def update(self):
-        self.speedy += aceleracao
-        if self.speedy > 75:
-            self.speedy = 75 
+        self.rect.x += self.speedx + aceleracao
+        if self.speedx > -15:
+            self.speedx = -15 
         if self.rect.x < 0:
             self.kill()
             
@@ -101,31 +109,37 @@ class Cano_de_baixo (pygame.sprite.Sprite):
     def __init__(self,canodebaixo):
         
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(canodebaixo, (50, 100))       
+        
+        #altura do cano aleatoria
+        aleatorio = random.randint(100,250)
+        
+        self.image = pygame.transform.scale(canodebaixo, (80, aleatorio))       
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         
         #posicao
         self.rect.y = HEIGHT-150
-        self.rect.x =(WIDTH/2)
+        self.rect.x =(WIDTH/2)+25
         
-        self.speedx = 30
+        self.speedx = -5
         self.speedy = 0
         
     #def update(self):
     def update(self):
-        self.speedx += aceleracao
-        if self.speedx > 75:
-            self.speedx = 75 
+        self.rect.x += self.speedx + aceleracao
+        if self.speedx > -15:
+            self.speedx = -15 
         if self.rect.x < 0:
             self.kill()
+            
+        
             
 class Base(pygame.sprite.Sprite): 
           
     def __init__(self,base):
         
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(base,(380,100))
+        self.image = pygame.transform.scale(base,(10000,100))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         
@@ -134,13 +148,13 @@ class Base(pygame.sprite.Sprite):
         self.rect.y = HEIGHT-100
         
         #velocidade
-        self.speedx = 30
+        self.speedx = -5
         self.speedy = 0 
         
     def update(self):
-        self.speedx += aceleracao
-        if self.speedx > 75:
-            self.speedx = 75 
+        self.rect.x += self.speedx + aceleracao
+        if self.speedx > -15:
+            self.speedx = -15 
             
 
 
@@ -163,6 +177,7 @@ def game_screen(screen):
     clock = pygame.time.Clock()
     
     background = assets["background"]
+    #background.image = pygame.transform.scale(background(WIDTH,HEIGHT))
     background_rect = background.get_rect()
     
     #cria o passaro
@@ -181,23 +196,17 @@ def game_screen(screen):
 
     all_sprites.add(base)
     
+    
+    
     PLAYING = 0
 
     DONE = 1
 
     state = PLAYING
     while state != DONE:
-        #hits = pygame.sprite.groupcollide(canodecima,player, False, pygame.sprite.collide_circle)
-        #hits2 = pygame.sprite.groupcollide(canodebaixo,player,False, pygame.sprite.collide_circle)
-        
-        #if hits:
-           # assets['hit'].play()
-            #state = DONE
-       # elif hits2:
-           # assets['hit'].play()
-           # state = DONE
         
         clock.tick(FPS)
+        
         
         if state == PLAYING:
             for event in pygame.event.get():
@@ -210,6 +219,22 @@ def game_screen(screen):
                         player.speedy = -15
                         assets['barulho_pulo'].play()
                         
+        #if state == PLAYING:
+            
+            #for canodebaixo.rect.x in range(0,1):
+               # all_sprites.add(canodebaixo)
+                
+        #if state == PLAYING:          
+         #   hit1 = pygame.sprite.spritecollide(canodecima, player, False)
+          #  hit2 = pygame.sprite.spritecollide(canodebaixo, player, False)
+           # 
+            #if hit2 or hit1:
+             #   assets['hit'].play()
+              #  player.kill()
+               # state = DONE
+                
+            
+            
         all_sprites.update()
         screen.fill(BLACK)
         screen.blit(background, background_rect)
