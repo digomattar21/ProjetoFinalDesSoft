@@ -30,13 +30,14 @@ YELLOW = (255, 255, 0)
 #Constantes
 gravidade = 2
 GROUND = HEIGHT*5//6
-velocidadecano = -4
-aceleracao = 0.5
+aceleracao = -0.05
+H = 130
 
 #3 possiveis estados do 
 STILL =0
 JUMPING = 1
 FALLING = 2
+contador = 0
 #classe do passaro
 class Player(pygame.sprite.Sprite):
     
@@ -44,7 +45,7 @@ class Player(pygame.sprite.Sprite):
         #construtor e coletar imagem 
         pygame.sprite.Sprite.__init__(self)    
         self.image = player_img      
-        self.image = pygame.transform.scale(player_img, (35, 35))   
+        self.image = pygame.transform.scale(player_img, (45, 45))   
         self.image.set_colorkey(BLACK)   
         self.rect = self.image.get_rect()
         
@@ -64,10 +65,6 @@ class Player(pygame.sprite.Sprite):
         
     def update(self):
         self.rect.y += self.speedy 
-        if self.rect.bottom > GROUND:
-            self.rect.bottom = GROUND
-            self.speedy = 0 
-            self.state = STILL
         if self.rect.y <= 0:
             self.rect.y = 0
             self.speedy = 0 
@@ -77,137 +74,240 @@ class Player(pygame.sprite.Sprite):
         
 class Cano_de_cima (pygame.sprite.Sprite):
     
-    def __init__(self, canodecima):
+    def __init__(self, canodecima,x):
         
         pygame.sprite.Sprite.__init__(self)
         
         #define a largura aleatoria do cano
-        aleatorio = random.randint(100,250)
+        aleatorio = random.randint(100,350)
         
-        self.image = pygame.transform.scale(canodecima, (80, aleatorio))       
+        self.image = pygame.transform.scale(canodecima, (80, 600))       
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         
         #poscicoes 
-        self.rect.y =  0
-        self.rect.x = (WIDTH/2)+25
+        self.rect.bottom =  aleatorio
+        self.rect.x = x
         
-        self.speedx = -5
+        self.speedx = -4.5
         self.speedy = 0 
         
     #def update(self):
     def update(self):
-        self.rect.x += self.speedx + aceleracao
-        if self.speedx > -15:
-            self.speedx = -15 
-        if self.rect.x < 0:
-            self.kill()
+        self.rect.x += self.speedx 
+        if self.speedx > -4.5:
+            self.speedx = -4.5
+
             
 
 class Cano_de_baixo (pygame.sprite.Sprite):
 
-    def __init__(self,canodebaixo):
+    def __init__(self,canodebaixo,x,y):
         
         pygame.sprite.Sprite.__init__(self)
         
         #altura do cano aleatoria
-        aleatorio = random.randint(100,250)
+
         
-        self.image = pygame.transform.scale(canodebaixo, (80, aleatorio))       
-        self.image.set_colorkey(BLACK)
+        self.image = pygame.transform.scale(canodebaixo, (80, 600))       
+        self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         
         #posicao
-        self.rect.y = HEIGHT-150
-        self.rect.x =(WIDTH/2)+25
+        self.rect.top = y
+        self.rect.x = x
         
-        self.speedx = -5
+        self.speedx = -4.5
         self.speedy = 0
         
     #def update(self):
     def update(self):
-        self.rect.x += self.speedx + aceleracao
-        if self.speedx > -15:
-            self.speedx = -15 
-        if self.rect.x < 0:
-            self.kill()
+        self.rect.x += self.speedx 
+        if self.speedx > -4.5:
+            self.speedx = -4.5 
+
             
         
             
 class Base(pygame.sprite.Sprite): 
           
-    def __init__(self,base):
+    def __init__(self,base,x,y):
         
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(base,(10000,100))
+        self.image = pygame.transform.scale(base,(9999,100))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         
         # posicao 
-        self.rect.x = 0
-        self.rect.y = HEIGHT-100
+        self.rect.x = x
+        self.rect.y = y
         
         #velocidade
-        self.speedx = -5
+        self.speedx = -4.5
         self.speedy = 0 
         
     def update(self):
-        self.rect.x += self.speedx + aceleracao
-        if self.speedx > -15:
-            self.speedx = -15 
-            
+        self.rect.x += self.speedx 
 
+class Telainicial(pygame.sprite.Sprite):
+    
+    def __init__(self,inicio,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(inicio,(350,300))
+        self.image.set_colorkey(BLACK)
+        self.rect  = self.image.get_rect()
+        
+        #posicao
+        self.rect.x = x 
+        self.rect.y = y
+        
+        self.speedy = 0
+        
+    def update(self):
+        self.speedy += 0
+        
+class Game_over(pygame.sprite.Sprite):
+
+    def __init__(self,gameover,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(gameover,(300,150))
+        self.image.set_colorkey(WHITE)
+        self.rect = self.image.get_rect()
+    
+        self.rect.x = x 
+        self.rect.y = y   
+                
 
 def load_assets(img_dir, snd_dir, fnt_dir):
     assets = {}
-    assets["player_img"] = pygame.image.load(path.join(img_dir, "yellowbird-upflap.png")).convert()
+    assets["player_img"] = pygame.image.load(path.join(img_dir, "jod.png")).convert()
     assets["canodecima"] = pygame.image.load(path.join(img_dir, "upper_pipe_img.png")).convert()
     assets['canodebaixo']=pygame.image.load(path.join(img_dir, "lower_pipe_img.png")).convert()
+    assets['barulho_pulo']=pygame.mixer.Sound(path.join(img_dir, 'swoosh.wav'))
+    assets['background']=pygame.image.load(path.join(img_dir, "background-night.png")).convert()
     assets['barulho_pulo']=pygame.mixer.Sound(path.join(img_dir, 'swoosh.wav')) 
-    assets['background']=pygame.image.load(path.join(img_dir, "background-day.png")).convert()
-    assets['barulho_pulo']=pygame.mixer.Sound(path.join(img_dir, 'swoosh.wav')) 
-    assets['base'] = pygame.image.load(path.join(img_dir, "base.png")).convert()
+    assets['base'] = pygame.image.load(path.join(img_dir, "base.png"))
     assets['hit'] = pygame.mixer.Sound(path.join(img_dir, 'hit.wav'))
+    assets['score0'] = pygame.image.load(path.join(img_dir, "0.png")).convert()
+    assets['score1'] = pygame.image.load(path.join(img_dir, "1.png")).convert()
+    assets['score2'] = pygame.image.load(path.join(img_dir, "2.png")).convert()
+    assets['score3'] = pygame.image.load(path.join(img_dir, "3.png")).convert()
+    assets['score4'] = pygame.image.load(path.join(img_dir, "4.png")).convert()
+    assets['score5'] = pygame.image.load(path.join(img_dir, "5.png")).convert()
+    assets['score6'] = pygame.image.load(path.join(img_dir, "6.png")).convert()
+    assets['score7'] = pygame.image.load(path.join(img_dir, "7.png")).convert()
+    assets['score8'] = pygame.image.load(path.join(img_dir, "8.png")).convert()
+    assets['score9'] = pygame.image.load(path.join(img_dir, "9.png")).convert()   
+    assets['song'] = pygame.mixer.Sound(path.join(img_dir, 'song.wav'))
+    assets['point'] = pygame.mixer.Sound(path.join(img_dir, 'point.wav'))
+    assets['inicio'] = pygame.image.load(path.join(img_dir, "inicio.png")).convert()   
+    assets['gameover'] = pygame.image.load(path.join(img_dir, "gameover.png")).convert()
     return assets
 
+
+#funcao que faz o score 
+class Score (pygame.sprite.Sprite):
+    def __init__(self, scoreinicial,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(scoreinicial,(50,100))
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x 
+        self.rect.y = y 
+        
+
 def game_screen(screen):
+    contador =0 
+    
     
     assets = load_assets(img_dir, snd_dir, fnt_dir)
-                         
+                        
     clock = pygame.time.Clock()
     
     background = assets["background"]
-    #background.image = pygame.transform.scale(background(WIDTH,HEIGHT))
+    background = pygame.transform.scale(background,(WIDTH,HEIGHT-100))
     background_rect = background.get_rect()
     
     #cria o passaro
     player = Player(assets["player_img"])
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
+    classeplayer = pygame.sprite.Group()
+    classeplayer.add(player)
     
-    canodebaixo = Cano_de_baixo(assets['canodebaixo'])
-
-    all_sprites.add(canodebaixo)
-    
-    canodecima = Cano_de_cima(assets['canodecima'])
+         
+    #cria os canos
+    canos = pygame.sprite.Group()
+    #Canodecima1
+    canodecima = Cano_de_cima(assets['canodecima'], (WIDTH/2)+250)
     all_sprites.add(canodecima)
-    
-    base = Base(assets['base'])
-
+    canos.add(canodecima)
+    #Canodebaixo1 
+    canodebaixo = Cano_de_baixo(assets['canodebaixo'], (WIDTH/2)+250,canodecima.rect.bottom+H)
+    all_sprites.add(canodebaixo)
+    canos.add(canodebaixo)
+     #Canodecima2
+    canodecima2 = Cano_de_cima(assets['canodecima'], (WIDTH/2)+550)
+    all_sprites.add(canodecima2)
+    canos.add(canodecima2)
+    #Canodebaixo2
+    canodebaixo2 = Cano_de_baixo(assets['canodebaixo'],(WIDTH/2)+550, canodecima2.rect.bottom+H)
+    all_sprites.add(canodebaixo2)
+    canos.add(canodebaixo2)
+    #canodecima3
+    canodecima3 = Cano_de_cima(assets['canodecima'], (WIDTH/2)+850)
+    all_sprites.add(canodecima3)
+    canos.add(canodecima3)
+    #Canodebaixo3
+    canodebaixo3 = Cano_de_baixo(assets['canodebaixo'],(WIDTH/2)+850, canodecima3.rect.bottom+H)
+    all_sprites.add(canodebaixo3)
+    canos.add(canodebaixo3)
+  
+    #adiciona a base
+    classebase = pygame.sprite.Group()
+    base = Base(assets['base'],0,HEIGHT-100)
     all_sprites.add(base)
+    classebase.add(base)
+    #segundabase
+    base2 = Base(assets['base'],1000,HEIGHT-100)
+    all_sprites.add(base2)
+    classebase.add(base2)
     
+    #adiciona  os scores
+    scores = pygame.sprite.Group()
+    score0 = Score(assets['score0'], WIDTH/2,(HEIGHT/2)-250)
+    scores.add(score0)
+    all_sprites.add(score0)
     
-    
+    #estados
     PLAYING = 0
-
     DONE = 1
-
-    state = PLAYING
-    while state != DONE:
+    INICIO = 2
+    GAME_OVER = 3 
+    state = INICIO
+    
+    telainicial = pygame.sprite.Group()
         
+    while state != DONE:
+        assets['song'].play() 
         clock.tick(FPS)
         
-        
+        if state == INICIO:
+            player.speedy = STILL
+            inicial = Telainicial(assets['inicio'], 10, (HEIGHT/2)-250)
+            telainicial.add(inicial)
+            telainicial.draw(screen)
+            telainicial.update()
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        del telainicial
+                        state = PLAYING
+                        player.speedy = FALLING
+
+                        
         if state == PLAYING:
             for event in pygame.event.get():
                 #adiciona o quit
@@ -216,33 +316,87 @@ def game_screen(screen):
                 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        player.speedy = -15
+                        player.speedy = -12.5
                         assets['barulho_pulo'].play()
                         
-        #if state == PLAYING:
+    
+        if len(canos)<4 and state == PLAYING:
+            novo_cano_de_cima = Cano_de_cima(assets['canodecima'],(WIDTH/2)+350)         
+            novo_cano_de_baixo = Cano_de_baixo(assets['canodebaixo'], (WIDTH/2)+350, novo_cano_de_cima.rect.bottom+H)
+            canos.add(novo_cano_de_cima)
+            canos.add(novo_cano_de_baixo)
+            all_sprites.add(novo_cano_de_cima)
+            all_sprites.add(novo_cano_de_baixo)
             
-            #for canodebaixo.rect.x in range(0,1):
-               # all_sprites.add(canodebaixo)
+            
+        for i in canos:
+            if i.rect.right < 1 and state == PLAYING:
+                contador += 0.5
+                i.kill()
+                if contador%1==0:
+                    numeros=str(int(contador))
+                    digitos=0
+                    
+                    
+                    for z in numeros:
+               
+                        if digitos==0:
+                            x=WIDTH/2
+                            y=(HEIGHT/2)-250
+                        else:
+                            x=WIDTH/2 - 60
+                            y=(HEIGHT/2)-250
+                            
+                        img_name = "score{0}".format(numeros[len(numeros)-(digitos+1)])
+                      
+                        score1 = Score(assets[img_name], x,y)
+                        scores.add(score1)
+                        all_sprites.add(score1)
+                        assets['point'].play()
+                        digitos+=1 
+                        
                 
-        #if state == PLAYING:          
-         #   hit1 = pygame.sprite.spritecollide(canodecima, player, False)
-          #  hit2 = pygame.sprite.spritecollide(canodebaixo, player, False)
-           # 
-            #if hit2 or hit1:
-             #   assets['hit'].play()
-              #  player.kill()
-               # state = DONE
+        for base1 in classebase:
+            if base1.rect.centerx == 380:
+                nova_base = Base(assets['base'],0,HEIGHT-100)
+                classebase.add(nova_base)
+                all_sprites.add(nova_base)
+        
+        
+        if state == PLAYING:          
+            hit = pygame.sprite.groupcollide(canos, classeplayer, False,False)
+            hit2 = pygame.sprite.groupcollide(classebase,classeplayer,False, False)
+            
+            if len(hit)!= 0:
+                assets['hit'].play()
+                player.kill()
+                state = GAME_OVER
                 
-            
-            
+                
+            if len(hit2)!= 0:
+                assets['hit'].play()
+                player.kill()
+                state = GAME_OVER
+         
+        
+        if state == GAME_OVER:
+            game_over = Game_over(assets['gameover'],50,(WIDTH/2)-50)
+            all_sprites.add(game_over)
+            for s in scores:
+                del s 
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        state = DONE
+
+                      
         all_sprites.update()
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
         pygame.display.flip()
-        
 
-# Inicialização do Pygame.
+# Inicialização do Pygame
 pygame.init()
 pygame.mixer.init()
 
@@ -257,10 +411,3 @@ try:
     game_screen(screen)
 finally:
     pygame.quit()
-
-
-        
-        
-        
-        
-        
