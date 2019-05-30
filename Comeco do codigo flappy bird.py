@@ -325,6 +325,8 @@ def game_screen(screen):
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
+                        for p in classeplayer:
+                            p.kill()
                         jogador = "jod{0}".format(proximo+1)
                         player = Player(assets[jogador])
                         all_sprites.add(player)
