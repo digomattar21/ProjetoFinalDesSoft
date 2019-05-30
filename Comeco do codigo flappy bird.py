@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue May 14 15:48:52 2019
-
-@author: digomattar
-"""
 
 import pygame
 import random
@@ -37,7 +32,7 @@ H = 130
 STILL =0
 JUMPING = 1
 FALLING = 2
-contador = 0
+
 #classe do passaro
 class Player(pygame.sprite.Sprite):
     
@@ -57,7 +52,7 @@ class Player(pygame.sprite.Sprite):
         
         self.speedx = 0 
         
-        self.speedy = FALLING
+        self.speedy = 2
         
         self.state = FALLING
         
@@ -170,8 +165,8 @@ class Game_over(pygame.sprite.Sprite):
 
     def __init__(self,gameover,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(gameover,(300,150))
-        self.image.set_colorkey(WHITE)
+        self.image = pygame.transform.scale(gameover,(350,300))
+
         self.rect = self.image.get_rect()
     
         self.rect.x = x 
@@ -180,11 +175,11 @@ class Game_over(pygame.sprite.Sprite):
 
 def load_assets(img_dir, snd_dir, fnt_dir):
     assets = {}
-    assets["player_img"] = pygame.image.load(path.join(img_dir, "jod.png")).convert()
+    assets["jod1"] = pygame.image.load(path.join(img_dir, "jod.png")).convert()
     assets["canodecima"] = pygame.image.load(path.join(img_dir, "upper_pipe_img.png")).convert()
     assets['canodebaixo']=pygame.image.load(path.join(img_dir, "lower_pipe_img.png")).convert()
     assets['barulho_pulo']=pygame.mixer.Sound(path.join(img_dir, 'swoosh.wav'))
-    assets['background']=pygame.image.load(path.join(img_dir, "background-night.png")).convert()
+    assets['background']=pygame.image.load(path.join(img_dir, "backgroundnovo.png")).convert()
     assets['barulho_pulo']=pygame.mixer.Sound(path.join(img_dir, 'swoosh.wav')) 
     assets['base'] = pygame.image.load(path.join(img_dir, "base.png"))
     assets['hit'] = pygame.mixer.Sound(path.join(img_dir, 'hit.wav'))
@@ -201,7 +196,19 @@ def load_assets(img_dir, snd_dir, fnt_dir):
     assets['song'] = pygame.mixer.Sound(path.join(img_dir, 'song.wav'))
     assets['point'] = pygame.mixer.Sound(path.join(img_dir, 'point.wav'))
     assets['inicio'] = pygame.image.load(path.join(img_dir, "inicio.png")).convert()   
-    assets['gameover'] = pygame.image.load(path.join(img_dir, "gameover.png")).convert()
+    assets['jod2'] = pygame.image.load(path.join(img_dir, "jod2.png")).convert()
+    assets['jod3'] = pygame.image.load(path.join(img_dir, "jod3.png")).convert()
+    assets['jod4'] = pygame.image.load(path.join(img_dir, "jod4.png")).convert()
+    assets['jod5'] = pygame.image.load(path.join(img_dir, "jod5.png")).convert()
+    assets['jod6'] = pygame.image.load(path.join(img_dir, "jod6.png")).convert()
+    assets['jod7'] = pygame.image.load(path.join(img_dir, "jod8.png")).convert()
+    assets['jod9'] = pygame.image.load(path.join(img_dir, "jod9.png")).convert()
+    assets['Canodecima1'] = pygame.image.load(path.join(img_dir, "Canodecima1.png")).convert()
+    assets['Canodebaixo1'] = pygame.image.load(path.join(img_dir, "Canodebaixo1.png")).convert()
+    assets['background1'] = pygame.image.load(path.join(img_dir, "background1.png")).convert()
+    assets['gameover1'] = pygame.image.load(path.join(img_dir, "gameover1.png")).convert_alpha()
+    assets['telainicial1'] = pygame.image.load(path.join(img_dir, "telainicial1.png")).convert()
+    assets['jodpulando'] = pygame.image.load(path.join(img_dir, "jodpulando.png")).convert()
     return assets
 
 
@@ -209,17 +216,30 @@ def load_assets(img_dir, snd_dir, fnt_dir):
 class Score (pygame.sprite.Sprite):
     def __init__(self, scoreinicial,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(scoreinicial,(50,100))
+        self.image = pygame.transform.scale(scoreinicial,(80,150))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
 
         self.rect.x = x 
         self.rect.y = y 
-        
+ 
 
+#def HighScore(screen):
+class Jumping (pygame.sprite.Sprite):
+    def __init__(self,jod,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(jod,(45,45))
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x 
+        self.rect.y = y 
+
+        
+        
 def game_screen(screen):
-    contador =0 
-    
+    contador =0
+    proximo = 1
     
     assets = load_assets(img_dir, snd_dir, fnt_dir)
                         
@@ -230,13 +250,15 @@ def game_screen(screen):
     background_rect = background.get_rect()
     
     #cria o passaro
-    player = Player(assets["player_img"])
     all_sprites = pygame.sprite.Group()
-    all_sprites.add(player)
     classeplayer = pygame.sprite.Group()
+    #randomiza a escolha do sprite(jod)
+    player = Player(assets["jod1"])
+    all_sprites.add(player)
     classeplayer.add(player)
-    
-         
+
+        
+  
     #cria os canos
     canos = pygame.sprite.Group()
     #Canodecima1
@@ -295,13 +317,21 @@ def game_screen(screen):
         
         if state == INICIO:
             player.speedy = STILL
-            inicial = Telainicial(assets['inicio'], 10, (HEIGHT/2)-250)
+            inicial = Telainicial(assets['telainicial1'], 10, (HEIGHT/2)-250)
             telainicial.add(inicial)
             telainicial.draw(screen)
             telainicial.update()
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT:
+                        jogador = "jod{0}".format(proximo+1)
+                        player = Player(assets[jogador])
+                        all_sprites.add(player)
+                        classeplayer.add(player)
+                        proximo += 1
+                        if proximo >= 5:
+                            proximo =  1
                     if event.key == pygame.K_SPACE:
                         del telainicial
                         state = PLAYING
@@ -319,7 +349,8 @@ def game_screen(screen):
                         player.speedy = -12.5
                         assets['barulho_pulo'].play()
                         
-    
+                        
+        
         if len(canos)<4 and state == PLAYING:
             novo_cano_de_cima = Cano_de_cima(assets['canodecima'],(WIDTH/2)+350)         
             novo_cano_de_baixo = Cano_de_baixo(assets['canodebaixo'], (WIDTH/2)+350, novo_cano_de_cima.rect.bottom+H)
@@ -347,6 +378,8 @@ def game_screen(screen):
                             x=WIDTH/2 - 60
                             y=(HEIGHT/2)-250
                             
+                        for s in scores:
+                            s.kill()
                         img_name = "score{0}".format(numeros[len(numeros)-(digitos+1)])
                       
                         score1 = Score(assets[img_name], x,y)
@@ -380,7 +413,7 @@ def game_screen(screen):
          
         
         if state == GAME_OVER:
-            game_over = Game_over(assets['gameover'],50,(WIDTH/2)-50)
+            game_over = Game_over(assets['gameover1'],50,(WIDTH/2)+50)
             all_sprites.add(game_over)
             for s in scores:
                 del s 
