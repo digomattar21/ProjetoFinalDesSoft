@@ -209,6 +209,9 @@ def load_assets(img_dir, snd_dir, fnt_dir):
     assets['gameover1'] = pygame.image.load(path.join(img_dir, "gameover1.png")).convert_alpha()
     assets['telainicial1'] = pygame.image.load(path.join(img_dir, "telainicial1.png")).convert()
     assets['jodpulando'] = pygame.image.load(path.join(img_dir, "jodpulando.png")).convert()
+    assets['femalejod'] = pygame.image.load(path.join(img_dir, "femaleJod.png")).convert()
+    assets['chooseyourskin'] = pygame.image.load(path.join(img_dir, "chooseyourskin.png")).convert()
+    
     return assets
 
 
@@ -234,7 +237,17 @@ class Jumping (pygame.sprite.Sprite):
 
         self.rect.x = x 
         self.rect.y = y 
-
+        
+#choose your skin sprite
+class ChooseSkin(pygame.sprite.Sprite):
+    def __init__(self, femalejod,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(femalejod,(200,100))
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        
+        self.rect.x = x
+        self.rect.y = y
         
         
 def game_screen(screen):
@@ -318,6 +331,8 @@ def game_screen(screen):
         if state == INICIO:
             player.speedy = STILL
             inicial = Telainicial(assets['telainicial1'], 10, (HEIGHT/2)-250)
+            inicial2 = ChooseSkin(assets['chooseyourskin'], 150,(HEIGHT-300))
+            telainicial.add(inicial2)
             telainicial.add(inicial)
             telainicial.draw(screen)
             telainicial.update()
@@ -334,6 +349,12 @@ def game_screen(screen):
                         proximo += 1
                         if proximo >= 5:
                             proximo =  1
+                    if event.key == pygame.K_LEFT:
+                        for p in classeplayer:
+                            p.kill()
+                        player = Player(assets['femalejod'])
+                        all_sprites.add(player)
+                        classeplayer.add(player)
                     if event.key == pygame.K_SPACE:
                         del telainicial
                         state = PLAYING
