@@ -334,6 +334,7 @@ def game_screen(screen):
            player.speedy = STILL
            inicial = Telainicial(assets['telainicial1'], 10, (HEIGHT/2)-250)
            inicial2 = ChooseSkin(assets['chooseyourskin'], 150,(HEIGHT-300))
+           telainicial = pygame.sprite.Group()
            telainicial.add(inicial2)
            telainicial.add(inicial)
            telainicial.draw(screen)
@@ -440,10 +441,33 @@ def game_screen(screen):
 
 
        if state == GAME_OVER:
-           game_over = Game_over(assets['gameover1'],50,(WIDTH/2)+50)
+           game_over = Game_over(assets['gameover1'],50,(WIDTH/2))
            all_sprites.add(game_over)
-           for s in scores:
-               del s 
+           for i in canos:
+               i.kill()
+           if contador < 10:
+               for s in scores:
+                   s.kill()                   
+               strcont = str(int(contador))
+               img = "score{0}".format(strcont)
+               newscore = Score(assets[img],100,(WIDTH/2+200))
+               all_sprites.add(newscore)
+           elif contador >= 10:
+               strcont = str(int(contador))
+               primeirodigito = strcont[0]
+               segundodigito = strcont[1]
+               x1= 100
+               y1 = WIDTH/2+100
+               x2 = 150
+               y2 = WIDTH/2+100
+               img1 = "score{0}".format(primeirodigito)
+               img2 = "score{0}".format(segundodigito)
+               scorefinal1 = Score(assets[img1], x1,y1)
+               scorefinal2 = Score(assets[img2],x2,y2)
+               all_sprites.add(scorefinal1)
+               all_sprites.add(scorefinal2)
+               scores.add(scorefinal1)
+               scores.add(scorefinal2)
            for event in pygame.event.get():
                if event.type == pygame.KEYDOWN:
                    if event.key == pygame.K_SPACE:
