@@ -131,7 +131,7 @@ class Base(pygame.sprite.Sprite):
    def __init__(self,base,x,y):
 
        pygame.sprite.Sprite.__init__(self)
-       self.image = pygame.transform.scale(base,(9999,100))
+       self.image = pygame.transform.scale(base,(9999,150))
        self.image.set_colorkey(BLACK)
        self.rect = self.image.get_rect()
 
@@ -177,43 +177,44 @@ class Game_over(pygame.sprite.Sprite):
 
 def load_assets(img_dir, snd_dir, fnt_dir):
    assets = {}
-   assets["jod1"] = pygame.image.load(path.join(img_dir, "jod.png")).convert()
-   assets["canodecima"] = pygame.image.load(path.join(img_dir, "upper_pipe_img.png")).convert()
-   assets['canodebaixo']=pygame.image.load(path.join(img_dir, "lower_pipe_img.png")).convert()
+   assets["jod1"] = pygame.image.load(path.join(img_dir, "jod.png")).convert_alpha()
+   assets["canodecima"] = pygame.image.load(path.join(img_dir, "upper_pipe_img.png")).convert_alpha()
+   assets['canodebaixo']=pygame.image.load(path.join(img_dir, "lower_pipe_img.png")).convert_alpha()
    assets['barulho_pulo']=pygame.mixer.Sound(path.join(img_dir, 'swoosh.wav'))
-   assets['background']=pygame.image.load(path.join(img_dir, "backgroundnovo.png")).convert()
+   assets['background']=pygame.image.load(path.join(img_dir, "backgroundnovo.png")).convert_alpha()
    assets['barulho_pulo']=pygame.mixer.Sound(path.join(img_dir, 'swoosh.wav')) 
    assets['base'] = pygame.image.load(path.join(img_dir, "base.png"))
    assets['hit'] = pygame.mixer.Sound(path.join(img_dir, 'hit.wav'))
-   assets['score0'] = pygame.image.load(path.join(img_dir, "0.png")).convert()
-   assets['score1'] = pygame.image.load(path.join(img_dir, "1.png")).convert()
-   assets['score2'] = pygame.image.load(path.join(img_dir, "2.png")).convert()
-   assets['score3'] = pygame.image.load(path.join(img_dir, "3.png")).convert()
-   assets['score4'] = pygame.image.load(path.join(img_dir, "4.png")).convert()
-   assets['score5'] = pygame.image.load(path.join(img_dir, "5.png")).convert()
-   assets['score6'] = pygame.image.load(path.join(img_dir, "6.png")).convert()
-   assets['score7'] = pygame.image.load(path.join(img_dir, "7.png")).convert()
-   assets['score8'] = pygame.image.load(path.join(img_dir, "8.png")).convert()
-   assets['score9'] = pygame.image.load(path.join(img_dir, "9.png")).convert()   
+   assets['score0'] = pygame.image.load(path.join(img_dir, "0.png")).convert_alpha()
+   assets['score1'] = pygame.image.load(path.join(img_dir, "1.png")).convert_alpha()
+   assets['score2'] = pygame.image.load(path.join(img_dir, "2.png")).convert_alpha()
+   assets['score3'] = pygame.image.load(path.join(img_dir, "3.png")).convert_alpha()
+   assets['score4'] = pygame.image.load(path.join(img_dir, "4.png")).convert_alpha()
+   assets['score5'] = pygame.image.load(path.join(img_dir, "5.png")).convert_alpha()
+   assets['score6'] = pygame.image.load(path.join(img_dir, "6.png")).convert_alpha()
+   assets['score7'] = pygame.image.load(path.join(img_dir, "7.png")).convert_alpha()
+   assets['score8'] = pygame.image.load(path.join(img_dir, "8.png")).convert_alpha()
+   assets['score9'] = pygame.image.load(path.join(img_dir, "9.png")).convert_alpha()   
    assets['song'] = pygame.mixer.Sound(path.join(img_dir, 'song1.wav')) 
    assets['point'] = pygame.mixer.Sound(path.join(img_dir, 'point.wav'))
-   assets['inicio'] = pygame.image.load(path.join(img_dir, "inicio.png")).convert()   
-   assets['jod2'] = pygame.image.load(path.join(img_dir, "jod2.png")).convert()
-   assets['jod3'] = pygame.image.load(path.join(img_dir, "jod3.png")).convert()
-   assets['jod4'] = pygame.image.load(path.join(img_dir, "jod4.png")).convert()
-   assets['jod5'] = pygame.image.load(path.join(img_dir, "jod5.png")).convert()
-   assets['jod6'] = pygame.image.load(path.join(img_dir, "jod6.png")).convert()
-   assets['jod7'] = pygame.image.load(path.join(img_dir, "jod8.png")).convert()
-   assets['jod9'] = pygame.image.load(path.join(img_dir, "jod9.png")).convert()
-   assets['Canodecima1'] = pygame.image.load(path.join(img_dir, "Canodecima1.png")).convert()
-   assets['Canodebaixo1'] = pygame.image.load(path.join(img_dir, "Canodebaixo1.png")).convert()
-   assets['background1'] = pygame.image.load(path.join(img_dir, "background1.png")).convert()
+   assets['inicio'] = pygame.image.load(path.join(img_dir, "inicio.png")).convert_alpha()   
+   assets['jod2'] = pygame.image.load(path.join(img_dir, "jod2.png")).convert_alpha()
+   assets['jod3'] = pygame.image.load(path.join(img_dir, "jod3.png")).convert_alpha()
+   assets['jod4'] = pygame.image.load(path.join(img_dir, "jod4.png")).convert_alpha()
+   assets['jod5'] = pygame.image.load(path.join(img_dir, "jod5.png")).convert_alpha()
+   assets['jod6'] = pygame.image.load(path.join(img_dir, "jod6.png")).convert_alpha()
+   assets['jod7'] = pygame.image.load(path.join(img_dir, "jod8.png")).convert_alpha()
+   assets['jod9'] = pygame.image.load(path.join(img_dir, "jod9.png")).convert_alpha()
+   assets['Canodecima1'] = pygame.image.load(path.join(img_dir, "Canodecima1.png")).convert_alpha()
+   assets['Canodebaixo1'] = pygame.image.load(path.join(img_dir, "Canodebaixo1.png")).convert_alpha()
+   assets['background1'] = pygame.image.load(path.join(img_dir, "background1.png")).convert_alpha()
    assets['gameover1'] = pygame.image.load(path.join(img_dir, "gameover1.png")).convert_alpha()
-   assets['telainicial1'] = pygame.image.load(path.join(img_dir, "telainicial1.png")).convert()
-   assets['jodpulando'] = pygame.image.load(path.join(img_dir, "jodpulando.png")).convert()
-   assets['femalejod'] = pygame.image.load(path.join(img_dir, "femaleJod.png")).convert()
-   assets['chooseyourskin'] = pygame.image.load(path.join(img_dir, "chooseyourskin.png")).convert()
-
+   assets['telainicial1'] = pygame.image.load(path.join(img_dir, "telainicial1.png")).convert_alpha()
+   assets['jodpulando'] = pygame.image.load(path.join(img_dir, "jodpulando.png")).convert_alpha()
+   assets['femalejod'] = pygame.image.load(path.join(img_dir, "femaleJod.png")).convert_alpha()
+   assets['chooseyourskin'] = pygame.image.load(path.join(img_dir, "chooseyourskin.png")).convert_alpha()
+   assets['canodebaixoflappy'] = pygame.image.load(path.join(img_dir, "canodebaixoflappy.png")).convert_alpha()
+   assets['canodecimaflappy'] = pygame.image.load(path.join(img_dir, "canodecimaflappy.png")).convert_alpha()
    return assets
 
 
@@ -221,7 +222,7 @@ def load_assets(img_dir, snd_dir, fnt_dir):
 class Score (pygame.sprite.Sprite):
    def __init__(self, scoreinicial,x,y):
        pygame.sprite.Sprite.__init__(self)
-       self.image = pygame.transform.scale(scoreinicial,(80,150))
+       self.image = pygame.transform.scale(scoreinicial,(60,80))
        self.image.set_colorkey(BLACK)
        self.rect = self.image.get_rect()
 
@@ -255,13 +256,13 @@ class ChooseSkin(pygame.sprite.Sprite):
 def game_screen(screen):
    contador =0
    proximo = 1
-
+   
    assets = load_assets(img_dir, snd_dir, fnt_dir)
 
    clock = pygame.time.Clock()
 
-   background = assets["background"]
-   background = pygame.transform.scale(background,(WIDTH,HEIGHT-100))
+   background = assets["background1"]
+   background = pygame.transform.scale(background,(WIDTH,HEIGHT))
    background_rect = background.get_rect()
 
    #cria o passaro
@@ -378,7 +379,8 @@ def game_screen(screen):
 
 
        if len(canos)<4 and state == PLAYING:
-           novo_cano_de_cima = Cano_de_cima(assets['canodecima'],(WIDTH/2)+350)         
+
+           novo_cano_de_cima = Cano_de_cima(assets['canodecima'],(WIDTH/2)+350)        
            novo_cano_de_baixo = Cano_de_baixo(assets['canodebaixo'], (WIDTH/2)+350, novo_cano_de_cima.rect.bottom+H)
            canos.add(novo_cano_de_cima)
            canos.add(novo_cano_de_baixo)
@@ -404,17 +406,16 @@ def game_screen(screen):
                           x=WIDTH/2
                           y=(HEIGHT/2)-250
                       else:
-                          x=WIDTH/2 - 60
+                          x=WIDTH/2 - 90
                           y=(HEIGHT/2)-250
 
-                      for s in scores:
-                          s.kill()
-                          img_name = "score{0}".format(numeros[len(numeros)-(digitos+1)])
-                          score1 = Score(assets[img_name], x,y)
-                          scores.add(score1)
-                          all_sprites.add(score1)
-                          assets['point'].play()
-                          digitos+=1 
+                      
+                      img_name = "score{0}".format(numeros[len(numeros)-(digitos+1)])
+                      score1 = Score(assets[img_name], x,y)
+                      scores.add(score1)
+                      all_sprites.add(score1)
+                      assets['point'].play()
+                      digitos+=1 
 
 
        for base1 in classebase:
@@ -441,7 +442,7 @@ def game_screen(screen):
 
 
        if state == GAME_OVER:
-           game_over = Game_over(assets['gameover1'],50,(WIDTH/2))
+           game_over = Game_over(assets['gameover1'],50,(WIDTH/2)-100)
            all_sprites.add(game_over)
            for i in canos:
                i.kill()
@@ -450,16 +451,18 @@ def game_screen(screen):
                    s.kill()                   
                strcont = str(int(contador))
                img = "score{0}".format(strcont)
-               newscore = Score(assets[img],100,(WIDTH/2+200))
+               newscore = Score(assets[img],100,(WIDTH/2+100))
                all_sprites.add(newscore)
            elif contador >= 10:
+               for s  in scores:
+                   s.kill()
                strcont = str(int(contador))
                primeirodigito = strcont[0]
                segundodigito = strcont[1]
                x1= 100
-               y1 = WIDTH/2+100
-               x2 = 150
-               y2 = WIDTH/2+100
+               y1 = (WIDTH/2)+100
+               x2 = 170
+               y2 = (WIDTH/2)+100
                img1 = "score{0}".format(primeirodigito)
                img2 = "score{0}".format(segundodigito)
                scorefinal1 = Score(assets[img1], x1,y1)
