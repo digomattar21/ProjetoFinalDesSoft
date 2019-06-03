@@ -5,8 +5,6 @@ from os import path
 
 #diretorios de imagem e som
 img_dir = path.join(path.dirname(__file__), 'sprites')
-snd_dir = path.join(path.dirname(__file__), 'snd')
-fnt_dir = path.join(path.dirname(__file__), 'font')
 
 WIDTH = 380 # Largura da tela
 HEIGHT = 600 # Altura da tela
@@ -491,7 +489,7 @@ pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Nome do jogo
-pygame.display.set_caption("Flappy_Bird")
+pygame.display.set_caption("JodVentures")
 
 
 try:
