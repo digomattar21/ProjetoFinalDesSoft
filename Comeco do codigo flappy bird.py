@@ -72,7 +72,6 @@ class Cano_de_cima (pygame.sprite.Sprite):
        aleatorio = random.randint(100,350)
 
        self.image = pygame.transform.scale(canodecima, (80, 600))       
-       self.image.set_colorkey(BLACK)
        self.rect = self.image.get_rect()
 
        #poscicoes 
@@ -103,7 +102,6 @@ class Cano_de_baixo (pygame.sprite.Sprite):
 
 
        self.image = pygame.transform.scale(canodebaixo, (80, 600))       
-       self.image.set_colorkey(WHITE)
        self.rect = self.image.get_rect()
 
        #posicao
@@ -173,7 +171,7 @@ class Game_over(pygame.sprite.Sprite):
        self.rect.y = y   
 
 
-def load_assets(img_dir, snd_dir, fnt_dir):
+def load_assets(img_dir):
    assets = {}
    assets["jod1"] = pygame.image.load(path.join(img_dir, "jod.png")).convert_alpha()
    assets["canodecima"] = pygame.image.load(path.join(img_dir, "upper_pipe_img.png")).convert_alpha()
@@ -193,7 +191,6 @@ def load_assets(img_dir, snd_dir, fnt_dir):
    assets['score7'] = pygame.image.load(path.join(img_dir, "7.png")).convert_alpha()
    assets['score8'] = pygame.image.load(path.join(img_dir, "8.png")).convert_alpha()
    assets['score9'] = pygame.image.load(path.join(img_dir, "9.png")).convert_alpha()   
-   assets['song'] = pygame.mixer.Sound(path.join(img_dir, 'song1.wav')) 
    assets['point'] = pygame.mixer.Sound(path.join(img_dir, 'point.wav'))
    assets['inicio'] = pygame.image.load(path.join(img_dir, "inicio.png")).convert_alpha()   
    assets['jod2'] = pygame.image.load(path.join(img_dir, "jod2.png")).convert_alpha()
@@ -255,12 +252,12 @@ def game_screen(screen):
    contador =0
    proximo = 1
    
-   assets = load_assets(img_dir, snd_dir, fnt_dir)
+   assets = load_assets(img_dir)
 
    clock = pygame.time.Clock()
 
    background = assets["background1"]
-   background = pygame.transform.scale(background,(WIDTH,HEIGHT))
+   background = pygame.transform.scale(background,(WIDTH,HEIGHT+20))
    background_rect = background.get_rect()
 
    #cria o passaro
@@ -270,8 +267,16 @@ def game_screen(screen):
    player = Player(assets["jod1"])
    all_sprites.add(player)
    classeplayer.add(player)
-
-
+   
+   #Cria a base
+   classebase = pygame.sprite.Group()
+   base = Base(assets['base'],0,HEIGHT-100)
+   all_sprites.add(base)
+   classebase.add(base)
+   #segundabase
+   base2 = Base(assets['base'],1000,HEIGHT-100)
+   all_sprites.add(base2)
+   classebase.add(base2)
 
    #cria os canos
    canos = pygame.sprite.Group()
@@ -301,14 +306,7 @@ def game_screen(screen):
    canos.add(canodebaixo3)
 
    #adiciona a base
-   classebase = pygame.sprite.Group()
-   base = Base(assets['base'],0,HEIGHT-100)
-   all_sprites.add(base)
-   classebase.add(base)
-   #segundabase
-   base2 = Base(assets['base'],1000,HEIGHT-100)
-   all_sprites.add(base2)
-   classebase.add(base2)
+
 
    #adiciona  os scores
    scores = pygame.sprite.Group()
@@ -325,8 +323,7 @@ def game_screen(screen):
 
    telainicial = pygame.sprite.Group()
 
-   while state != DONE:
-       assets['song'].play() 
+   while state != DONE: 
        clock.tick(FPS)
 
        if state == INICIO:
@@ -339,6 +336,12 @@ def game_screen(screen):
            telainicial.draw(screen)
            telainicial.update()
            pygame.display.flip()
+           canodecima.speedx = 0
+           canodebaixo.speedx = 0 
+           canodecima2.speedx = 0
+           canodebaixo2.speedx = 0 
+           canodecima3.speedx = 0
+           canodebaixo3.speedx = 0 
            for event in pygame.event.get():
                if event.type == pygame.KEYDOWN:
                    if event.key == pygame.K_RIGHT:
@@ -392,7 +395,8 @@ def game_screen(screen):
           if i.rect.right<=player.rect.x and i.somado==False:
               contador += 0.5
               i.somado=True
-
+              for s in scores:
+                  s.kill()
               if contador%1==0:
                   numeros=str(int(contador))
                   digitos=0
